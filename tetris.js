@@ -492,9 +492,7 @@ Cell.prototype.isEmpty = function () {
 
 // returns the current state
 Cell.prototype.currentState = function () {
-
 	return this.state;
-
 }
 
 // set equal to another cell object
@@ -511,7 +509,8 @@ Row = function (cellsPerRow)
 {
 	this.EMPTY = 0;									// empty row
 	this.FILLED = 1;								// filled row
-	this.PARTIALLYFILLED = -1;						// has filled cell(s), but not completely filled/empty 
+	this.PARTIALLYFILLED = -1;						// has some filled cells, but the whole
+													//	 row is not completely filled/empty  
 	
 	this.numCells = cellsPerRow;					// number of cells
 	this.cells = new Array (this.numCells);			// all cells in the row 
@@ -527,21 +526,24 @@ Row = function (cellsPerRow)
 Row.prototype.setEqualTo = function (row) {
 	
 	if (row.numCells > 0) {
-		
-		this.numCells = row.numCells;
-		
-		this.cells = null;
-		this.cells = new Array (row.numCells);
-		
-		for (var i = 0; i < row.numCells; i++) {
-			this.cells[i] = new Cell ();
-			this.cells[i].setEqualTo (row.cells[i]);
+		// if cells in both objects' rows are not equal in length,
+		// 	delete old row and create a new one
+		if (this.numCells !== row.numCells)
+		{ 
+			this.numCells = row.numCells;
+			
+			this.cells = null;
+			this.cells = new Array (row.numCells);
+			
+			for (var i = 0, numCells = row.numCells; i < numCells; i++)
+				this.cells[i] = new Cell ();
 		}
+		
+		for (var i = 0, numCells = row.numCells; i < numCells; i++)
+			this.cells[i].setEqualTo (row.cells[i]);
 	}
 	else {
-		
-		alert ('Error: number of cells in a row must be greater than 0');
-	
+		console.log ('Error: number of cells in a row must be greater than 0');
 	}
 }
 
@@ -559,7 +561,7 @@ Row.prototype.setEqualToArray = function (array)
 		}
 	}
 	else {
-		alert ("Error: Unequal size.");
+		console.log ("Error: Unequal size.");
 	}
 }
 
@@ -640,8 +642,10 @@ Row.prototype.isFilled = function ()
 Row.prototype.isPartiallyFilled = function ()
 {
 	var partiallyFilled = false;
+	
 	if ((! this.isFilled ()) && (! this.isEmpty ()))
 		partiallyFilled = true;
+	
 	return partiallyFilled;
 	
 }
@@ -654,7 +658,7 @@ Row.prototype.printMe = function () {
 	{
 		buffer += (this.cells[i].isEmpty()? 0:1);			
 	}
-	alert (buffer);
+	console.log (buffer);
 }
 
 //--------------------------------------------------------------
@@ -908,7 +912,7 @@ Matrix.prototype.printMe = function () {
 		}
 		buffer += "\n";
 	}
-	alert (buffer);
+	console.log (buffer);
 }
 
 // prints the matrix block
@@ -967,7 +971,7 @@ Coord.prototype.move = function (R, C) {
 // Constructor 
 //--------------------------------------------------------------
 // Parameter: 
-// 		1) whichPiece (optional) - specifies the type of piece
+// 		1) whichPiece (optional) - specifies the type of tetris piece
 
 Piece = function (whichPiece) {
 	
@@ -2058,7 +2062,7 @@ Queue = function (length) {
 	}
 	else {
 		
-		alert ("Invalid queue length.");
+		console.log ("Invalid queue length.");
 	
 	}
 }
@@ -2672,7 +2676,7 @@ QueueView.prototype.resetMe = function () {
 var NUMROWS = 10, 							// number of rows in the board
 	NUMCOLS = 7;							// number of columns in the board
 var QUEUELENGTH = 3;						// length of the queue
-var GAMEVIEWPARENTNODEID = "main";
+var GAMEVIEWPARENTID = "main";
 	
 var piece = new Piece ();					// piece object 
 var board = new Board (NUMROWS, NUMCOLS); 	// board object
@@ -2863,7 +2867,7 @@ function drawStatusRight () {
 		
 		statusRight.appendChild(scoreboardView);
 	
-	document.getElementById(GAMEVIEWPARENTNODEID).appendChild(statusRight);
+	document.getElementById(GAMEVIEWPARENTID).appendChild(statusRight);
 	queueView.draw (statusRight.id);
 	
 }
@@ -2909,7 +2913,7 @@ function drawRankingView (parentNodeId) {
 			scores: hiddenScoreboardScores.split (",") 
 		};
 				
-		var rankTextStyle = ".rankText {font-size: 16px; float: left; width: 38%; margin: 5px 0px; padding: 0; display: inline-block; border: 0; }";
+		var rankTextStyle = ".rankText {font-size: 16px; float: left; width: 38%; margin: 5px 0px; padding: 0; border: 0; }";
 		appendStyle (rankTextStyle);
 	
 		for (var i = 0; i < hiddenScoreboard["names"].length; i++) {
@@ -2980,11 +2984,17 @@ function drawHighScoreEntryView (parentNodeId) {
 }
 
 // makes a block appears
-function showBlock (elementId) { 
+function showBlock (elementId, displayStyle) { 
 	
 	var elementBlock = document.getElementById(elementId);
-	elementBlock.style.display = "inline-block";
+	var style = "inline-block";
 	
+	if (typeof (displayStyle) == 'string' &&
+		displayStyle !== "" &&
+		displayStyle !== undefined)
+		style = displayStyle;
+	 	
+	elementBlock.style.display = style;
 }
 
 // makes a block disappears
@@ -3071,8 +3081,12 @@ function endGame () {
 	
 	if (minScore != -1 && parseInt (minScore) < finalScore.value)  // -1 meaning minScore hasn't been set
 		showBlock ('highScoreEntryView');
-	else
-		showBlock ('rankingView');
+	else {
+		var rankingView = document.getElementById ('rankingView');
+		rankingView.removeAttribute ("style");
+		console.log ("var rankingView = document.getElementById ('rankingView'); rankingView.style.display = 'static';");
+	}
+		
 }
 
 // restarts the game
@@ -3121,15 +3135,15 @@ queueView.addClass ("nmStyle", nmAttributes);
 queueView.addClass ("tStyle", tAttributes);
 
 // draw game components 
-boardView.draw (GAMEVIEWPARENTNODEID);
+boardView.draw (GAMEVIEWPARENTID);
 
 drawStatusRight ();  // wrapping queueView.draw and drawScoreboardView on the right side
 hideAllGameViews ();
 
-drawHighScoreEntryView (GAMEVIEWPARENTNODEID);
+drawHighScoreEntryView (GAMEVIEWPARENTID);
 hideBlock ("highScoreEntryView");
 
-drawRankingView (GAMEVIEWPARENTNODEID);			
+drawRankingView (GAMEVIEWPARENTID);			
 
 boardView.setFilledClass (boardView.getClassNameById(piece.getCurrentPieceIndex()));
 
