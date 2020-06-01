@@ -1,0 +1,39 @@
+#title {
+  width: 100%;
+  border: 0;
+  position: relative;
+  color: #fff;
+  background-color: #333;
+  text-align: center;
+}
+#sideStatus {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  position: relative;
+  display: inline-block;
+}
+#playButton {
+  color: #fff;
+  background-color: #333;
+  border: 0;
+  position: SpeechRecognitionAlternative;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  float: left;
+}
+#scoreboardView {
+  position: relative;
+  float: left;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.start {
+  border: 0;
+  position: relative;
+  color: #fff;
+  background-color: #333;
+  margin: 0;
+}
