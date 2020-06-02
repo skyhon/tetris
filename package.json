@@ -1,6 +1,5 @@
 {
   "name": "tetris",
-<<<<<<< HEAD
   "version": "1.1.0",
   "description": "tetris",
   "private": true,
@@ -8,28 +7,17 @@
     "start": "nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack -d --mode development"
-=======
-  "version": "0.0.0",
-  "description": "tetris",
-  "main": "tetris.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
->>>>>>> 8a7b4f7a1bf91ea15fff7421189222a143b4a8d4
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/skyhon/tetris.git"
   },
-<<<<<<< HEAD
   "keywords": [],
-=======
->>>>>>> 8a7b4f7a1bf91ea15fff7421189222a143b4a8d4
   "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/skyhon/tetris/issues"
   },
-<<<<<<< HEAD
   "homepage": "https://github.com/skyhon/tetris",
   "devDependencies": {
     "@babel/core": "^7.10.1",
@@ -43,7 +31,4 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {}
-=======
-  "homepage": "https://github.com/skyhon/tetris"
->>>>>>> 8a7b4f7a1bf91ea15fff7421189222a143b4a8d4
 }
